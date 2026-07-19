@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- A simple, safe example cursor asset (vector, no scripts). -->
+  <path d="M6 4 L6 24 L11 19 L14 26 L17 25 L14 18 L21 18 Z"
+        fill="#EAF0FA" stroke="#0B0F17" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

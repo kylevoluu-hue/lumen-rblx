@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:models="using:Lumen.Core.Models"
+             x:Class="Lumen.UI.Views.Pages.AccountsView"
+             x:DataType="pages:AccountsViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="16">
+    <StackPanel Spacing="4">
+      <TextBlock Text="{Binding Title}" FontSize="30" FontWeight="Bold" Foreground="#EAF0FA" />
+      <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#8595B2" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <!-- Honest sign-in availability notice. -->
+    <Border Background="#2A2015" BorderBrush="#5A4522" BorderThickness="1" CornerRadius="10" Padding="16">
+      <StackPanel Spacing="6">
+        <TextBlock Text="Interactive sign-in status" FontWeight="SemiBold" Foreground="#E9C77E" />
+        <TextBlock Text="{Binding AuthenticationExplanation}" TextWrapping="Wrap" FontSize="12" Foreground="#C9B48A" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card" MinWidth="0">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="label" Text="LOCAL ACCOUNT LABELS" />
+        <ListBox ItemsSource="{Binding Accounts}"
+                 SelectedItem="{Binding SelectedAccount, Mode=TwoWay}"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 MaxHeight="240">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="models:Account">
+              <StackPanel Spacing="2" Margin="2">
+                <TextBlock Text="{Binding DisplayLabel}" FontSize="14" />
+                <TextBlock Text="{Binding Username}" FontSize="11" Foreground="#6F7E99" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBox Watermark="New account nickname"
+                   Text="{Binding NewNickname, Mode=TwoWay}"
+                   Width="240" />
+          <Button Content="Add label" Command="{Binding AddCommand}" />
+          <Button Content="Remove selected"
+                  Command="{Binding RemoveCommand}"
+                  CommandParameter="{Binding SelectedAccount}" />
+        </StackPanel>
+        <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#8595B2" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,34 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:Lumen.UI"
+             x:Class="Lumen.App.App"
+             RequestedThemeVariant="Dark">
+
+  <Application.DataTemplates>
+    <ui:ViewLocator />
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <FluentTheme />
+
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="#141B2A" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="18" />
+      <Setter Property="Margin" Value="0,0,14,14" />
+      <Setter Property="MinWidth" Value="170" />
+    </Style>
+
+    <Style Selector="TextBlock.label">
+      <Setter Property="Foreground" Value="#6F7E99" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="TextBlock.value">
+      <Setter Property="Foreground" Value="#EAF0FA" />
+      <Setter Property="FontSize" Value="20" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+  </Application.Styles>
+</Application>

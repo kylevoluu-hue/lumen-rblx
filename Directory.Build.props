@@ -1,0 +1,33 @@
+<Project>
+
+  <!--
+    Shared MSBuild properties for every Lumen project.
+    Keeps individual .csproj files small and enforces consistent, secure defaults
+    (nullable reference types, modern language version, analyzers) across the solution.
+  -->
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
+
+    <!-- Product / assembly metadata -->
+    <LumenVersion>1.0.0-alpha.1</LumenVersion>
+    <Version>$(LumenVersion)</Version>
+    <Company>Lumen (community project)</Company>
+    <Product>Lumen</Product>
+    <Authors>Lumen contributors</Authors>
+    <Copyright>Lumen contributors. Not affiliated with Roblox Corporation.</Copyright>
+
+    <!-- Quality / analysis -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <!-- Keep the first build green; we still aim for zero warnings in our own code. -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

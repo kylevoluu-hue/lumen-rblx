@@ -1,0 +1,43 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+publish/
+artifacts/
+*.user
+*.suo
+
+# .NET
+project.lock.json
+*.nupkg
+*.snupkg
+.nuget/
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+*.DotSettings.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+[Tt]est[Rr]esults/
+coverage/
+*.trx
+*.coverage
+
+# Lumen local runtime data (should never be committed)
+**/LumenData/
+*.lumenlog
+
+# Secrets — never commit
+*.pfx
+*.snk
+secrets.json
+appsettings.*.local.json

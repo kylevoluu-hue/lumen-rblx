@@ -1,0 +1,13 @@
+{
+  "formatVersion": 1,
+  "id": "lumen.hello-widget",
+  "name": "Hello Widget",
+  "author": "Lumen",
+  "version": "1.0.0",
+  "description": "An example launcher extension manifest showing the permission model. It adds a dashboard widget and reads the active profile name.",
+  "minimumLumenVersion": "1.0.0",
+  "entryPoint": "hello-widget.dll",
+  "requestedPermissions": ["AddDashboardWidget", "ReadActiveProfile"],
+  "approvedDomains": [],
+  "hashes": {}
+}

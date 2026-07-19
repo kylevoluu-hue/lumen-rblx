@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.HomeView"
+             x:DataType="pages:HomeViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18">
+    <StackPanel Spacing="4">
+      <TextBlock Text="{Binding Title}" FontSize="30" FontWeight="Bold" Foreground="#EAF0FA" />
+      <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#8595B2" />
+    </StackPanel>
+
+    <Button Command="{Binding LaunchCommand}"
+            HorizontalAlignment="Left"
+            Padding="26,14"
+            FontSize="16"
+            FontWeight="SemiBold"
+            Background="#3D6BFF"
+            Foreground="White"
+            CornerRadius="10"
+            Content="▶  Launch Roblox" />
+    <TextBlock Text="{Binding LastLaunchStatus}" FontSize="12" Foreground="#6F7E99" />
+
+    <WrapPanel>
+      <Border Classes="card">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="label" Text="ACCOUNT" />
+          <TextBlock Classes="value" Text="{Binding SelectedAccount}" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="label" Text="PROFILE" />
+          <TextBlock Classes="value" Text="{Binding CurrentProfile}" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="label" Text="ROBLOX" />
+          <TextBlock Classes="value" Text="{Binding RobloxStatus}" />
+          <TextBlock Classes="label" Text="{Binding RobloxVersion}" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="label" Text="LUMEN VERSION" />
+          <TextBlock Classes="value" Text="{Binding LumenVersion}" />
+        </StackPanel>
+      </Border>
+      <Border Classes="card">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="label" Text="ENABLED MODS" />
+          <TextBlock Classes="value" Text="{Binding EnabledModCount}" />
+        </StackPanel>
+      </Border>
+    </WrapPanel>
+
+    <Border Background="#141B2A" CornerRadius="10" Padding="16">
+      <TextBlock Text="{Binding Disclaimer}" TextWrapping="Wrap" FontSize="12" Foreground="#8595B2" />
+    </Border>
+  </StackPanel>
+</UserControl>
