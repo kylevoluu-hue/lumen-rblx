@@ -1,0 +1,15 @@
+{
+  "formatVersion": 1,
+  "id": "lumen.example-cursor",
+  "name": "Example Cursor",
+  "author": "Lumen",
+  "version": "1.0.0",
+  "description": "A safe example cursor mod demonstrating the .lumenmod format. Cosmetic, data-only.",
+  "category": "Cursor",
+  "minimumLumenVersion": "1.0.0",
+  "supportedRobloxVersions": ["current"],
+  "files": ["Cursors/pointer.svg"],
+  "conflicts": [],
+  "dependencies": [],
+  "hashes": {}
+}

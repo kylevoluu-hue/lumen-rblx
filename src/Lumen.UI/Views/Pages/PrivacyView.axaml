@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:sys="using:System"
+             x:Class="Lumen.UI.Views.Pages.PrivacyView"
+             x:DataType="pages:PrivacyViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="16">
+    <StackPanel Spacing="4">
+      <TextBlock Text="{Binding Title}" FontSize="30" FontWeight="Bold" Foreground="#EAF0FA" />
+      <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#8595B2" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Border Classes="card" MinWidth="0">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="label" Text="DATA FOLDER" />
+        <TextBlock Text="{Binding DataFolder}" FontSize="13" TextWrapping="Wrap" Foreground="#C3CEE2" />
+        <Button Content="Open data folder" Command="{Binding OpenDataFolderCommand}" HorizontalAlignment="Left" />
+        <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#8595B2" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card" MinWidth="0">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="label" Text="WHAT LUMEN STORES (LOCALLY)" />
+        <ItemsControl ItemsSource="{Binding StoredItems}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="sys:String">
+              <TextBlock Text="{Binding}" FontSize="13" Foreground="#C3CEE2" Margin="0,2" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="Lumen never sells data, and never uploads launch history, keystrokes, or overlay data."
+                   TextWrapping="Wrap" FontSize="12" Foreground="#8595B2" Margin="0,6,0,0" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

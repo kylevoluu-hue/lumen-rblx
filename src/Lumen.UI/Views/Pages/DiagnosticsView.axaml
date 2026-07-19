@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.DiagnosticsView"
+             x:DataType="pages:DiagnosticsViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="16">
+    <StackPanel Spacing="4">
+      <TextBlock Text="{Binding Title}" FontSize="30" FontWeight="Bold" Foreground="#EAF0FA" />
+      <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#8595B2" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Button Content="Generate report" Command="{Binding GenerateCommand}" HorizontalAlignment="Left" />
+
+    <Border Classes="card" MinWidth="0">
+      <TextBox Text="{Binding Preview}"
+               IsReadOnly="True"
+               AcceptsReturn="True"
+               TextWrapping="NoWrap"
+               FontFamily="Cascadia Code,Consolas,monospace"
+               FontSize="12"
+               MinHeight="260"
+               Background="Transparent"
+               BorderThickness="0" />
+    </Border>
+  </StackPanel>
+</UserControl>
