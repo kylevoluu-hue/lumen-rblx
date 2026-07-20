@@ -1,3 +1,4 @@
+using System.Net.Http;
 using Lumen.Accounts;
 using Lumen.Core.Abstractions;
 using Lumen.Core.Common;
@@ -7,6 +8,7 @@ using Lumen.Launching;
 using Lumen.Mods;
 using Lumen.Profiles;
 using Lumen.Roblox;
+using Lumen.Security;
 using Lumen.Storage;
 using Lumen.UI.Navigation;
 using Lumen.UI.ViewModels;
@@ -37,9 +39,20 @@ internal static class Composition
             return new FileDiagnosticsLogger(paths, () => settings.Current.Privacy.OptionalLoggingEnabled);
         });
 
+        // Networking (public Roblox data only; every request is host-allowlisted)
+        services.AddSingleton(_ =>
+        {
+            var http = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+            http.DefaultRequestHeaders.UserAgent.ParseAdd("Lumen");
+            return http;
+        });
+        services.AddSingleton(_ => UrlValidator.CreateDefault());
+
         // Roblox integration
         services.AddSingleton<IRobloxInstallationLocator, RobloxInstallationLocator>();
         services.AddSingleton<IExperienceLinkValidator, ExperienceLinkValidator>();
+        services.AddSingleton<IRobloxWebClient, RobloxWebClient>();
+        services.AddSingleton<IRecentExperienceStore, RecentExperienceStore>();
 
         // Navigation + launching
         services.AddSingleton<INavigationService, NavigationService>();
@@ -71,10 +84,13 @@ internal static class Composition
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<LaunchViewModel>();
         services.AddSingleton<AccountsViewModel>();
+        services.AddSingleton<SocialViewModel>();
         services.AddSingleton<ProfilesViewModel>();
         services.AddSingleton<PerformanceViewModel>();
         services.AddSingleton<FastFlagsViewModel>();
+        services.AddSingleton<GraphicsViewModel>();
         services.AddSingleton<ModsViewModel>();
+        services.AddSingleton<InstallationsViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<PrivacyViewModel>();
         services.AddSingleton<DiagnosticsViewModel>();
@@ -93,38 +109,13 @@ internal static class Composition
             new("home", "Home", "\U0001F3E0", sp.GetRequiredService<HomeViewModel>()),
             new("launch", "Launch", "▶", sp.GetRequiredService<LaunchViewModel>()),
             new("accounts", "Accounts", "\U0001F464", sp.GetRequiredService<AccountsViewModel>()),
+            new("social", "Social", "\U0001F465", sp.GetRequiredService<SocialViewModel>()),
             new("profiles", "Profiles", "\U0001F5C2", sp.GetRequiredService<ProfilesViewModel>()),
             new("performance", "Performance", "⚡", sp.GetRequiredService<PerformanceViewModel>()),
             new("fastflags", "FastFlags", "\U0001F6A9", sp.GetRequiredService<FastFlagsViewModel>()),
-            new("display", "Display", "\U0001F5A5", Placeholder(
-                "Display",
-                "Resolution and window-mode manager.",
-                "Resolution presets and validation exist in Lumen.Resolution; monitor placement is Phase 5.")),
-            new("graphics", "Graphics", "\U0001F3A8", Placeholder(
-                "Graphics",
-                "Graphics presets with honest control-scope labels.",
-                "Preset taxonomy is defined in Lumen.Graphics; writing supported Roblox config is Phase 5.")),
-            new("overlays", "Overlays", "\U0001F4CA", Placeholder(
-                "Overlays",
-                "Optional, privacy-respecting overlays. Disabled by default; never read Roblox memory.",
-                "Overlay rendering and safe measurement backends are Phase 6.")),
+            new("graphics", "Graphics", "\U0001F3A8", sp.GetRequiredService<GraphicsViewModel>()),
             new("mods", "Mods", "\U0001F9E9", sp.GetRequiredService<ModsViewModel>()),
-            new("modpacks", "Mod Packs", "\U0001F4E6", Placeholder(
-                "Mod Packs",
-                "Combine several safe mods into a shareable pack.",
-                "Phase 7.")),
-            new("themes", "Themes", "\U0001F308", Placeholder(
-                "Themes",
-                "Non-executable cosmetic themes.",
-                "The theme schema is defined in Lumen.Themes; the runtime theme engine lands in a later phase.")),
-            new("installations", "Installations", "\U0001F4BD", Placeholder(
-                "Installations",
-                "Detect, verify, and repair launcher-managed files.",
-                "Read-only detection is implemented in Lumen.Roblox; repair/restore is Phase 3.")),
-            new("downloads", "Downloads", "⬇", Placeholder(
-                "Downloads",
-                "HTTPS-only, allowlisted, hash-verified downloads.",
-                "The URL allowlist and hash verification exist in Lumen.Security; the downloader is Phase 7.")),
+            new("installations", "Installations", "\U0001F4BD", sp.GetRequiredService<InstallationsViewModel>()),
             new("diagnostics", "Diagnostics", "\U0001FA7A", sp.GetRequiredService<DiagnosticsViewModel>()),
             new("privacy", "Privacy", "\U0001F6E1", sp.GetRequiredService<PrivacyViewModel>()),
             new("settings", "Lumen Settings", "⚙", sp.GetRequiredService<SettingsViewModel>()),
@@ -133,7 +124,4 @@ internal static class Composition
 
         return new ShellViewModel(entries, sp.GetRequiredService<INavigationService>());
     }
-
-    private static PlaceholderPageViewModel Placeholder(string title, string description, string note) =>
-        new(title, description, note);
 }

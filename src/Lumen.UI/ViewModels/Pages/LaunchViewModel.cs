@@ -13,6 +13,8 @@ public sealed partial class LaunchViewModel : PageViewModel
 {
     private readonly IExperienceLinkValidator _validator;
     private readonly ILaunchService _launchService;
+    private readonly IRecentExperienceStore _recent;
+    private readonly IRobloxWebClient _web;
 
     [ObservableProperty]
     private string _input = string.Empty;
@@ -23,10 +25,16 @@ public sealed partial class LaunchViewModel : PageViewModel
     [ObservableProperty]
     private bool _isLaunching;
 
-    public LaunchViewModel(IExperienceLinkValidator validator, ILaunchService launchService)
+    public LaunchViewModel(
+        IExperienceLinkValidator validator,
+        ILaunchService launchService,
+        IRecentExperienceStore recent,
+        IRobloxWebClient web)
     {
         _validator = validator;
         _launchService = launchService;
+        _recent = recent;
+        _web = web;
     }
 
     public override string Title => "Launch";
@@ -53,6 +61,13 @@ public sealed partial class LaunchViewModel : PageViewModel
             Status = result.IsSuccess
                 ? $"Launch requested for {validated.Value!.SafeDescription} — Roblox should be starting."
                 : result.Error!;
+
+            if (result.IsSuccess && validated.Value!.PlaceId is > 0)
+            {
+                var placeId = validated.Value!.PlaceId.Value;
+                var name = await _web.GetExperienceNameAsync(placeId).ConfigureAwait(true);
+                await _recent.RecordAsync(placeId, name.IsSuccess ? name.Value : null).ConfigureAwait(true);
+            }
         }
         finally
         {

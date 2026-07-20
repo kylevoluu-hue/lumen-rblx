@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.SocialView"
+             x:DataType="pages:SocialViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" Classes="pageRoot">
+    <Grid ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" Spacing="6">
+        <TextBlock Text="{Binding Title}" Classes="h1" />
+        <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+      </StackPanel>
+      <Button Grid.Column="1" Classes="subtle" Content="Refresh" Command="{Binding RefreshCommand}" VerticalAlignment="Center" />
+    </Grid>
+
+    <!-- Not linked -->
+    <Border Classes="card" IsVisible="{Binding !HasLinkedAccount}">
+      <TextBlock Text="{Binding StatusMessage}" Classes="body" TextWrapping="Wrap" />
+    </Border>
+
+    <!-- Profile -->
+    <Border Classes="card" IsVisible="{Binding HasLinkedAccount}">
+      <StackPanel Orientation="Horizontal" Spacing="16">
+        <Panel Width="72" Height="72">
+          <Border CornerRadius="14" Background="{DynamicResource LumenAccentSoftBrush}">
+            <TextBlock Text="L" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource LumenAccentBrush}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <Border CornerRadius="14" ClipToBounds="True">
+            <Image Source="{Binding ProfileAvatar}" Stretch="UniformToFill" />
+          </Border>
+        </Panel>
+        <StackPanel Spacing="3" VerticalAlignment="Center">
+          <TextBlock Text="{Binding ProfileName}" Classes="h2" />
+          <TextBlock Text="{Binding ProfileHandle}" Classes="caption" />
+          <TextBlock Text="{Binding ProfileDescription}" Classes="caption" TextWrapping="Wrap" MaxWidth="420" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Friends -->
+    <Border Classes="card" IsVisible="{Binding HasLinkedAccount}">
+      <StackPanel Spacing="12">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Classes="label" Text="FRIENDS" />
+          <TextBlock Text="{Binding StatusMessage}" Classes="caption" />
+        </StackPanel>
+        <ItemsControl ItemsSource="{Binding Friends}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="pages:FriendItemViewModel">
+              <StackPanel Width="96" Margin="4" Spacing="6" HorizontalAlignment="Center">
+                <Panel Width="56" Height="56" HorizontalAlignment="Center">
+                  <Border CornerRadius="12" Background="{DynamicResource LumenAccentSoftBrush}">
+                    <TextBlock Text="{Binding Initial}" FontSize="20" FontWeight="Bold"
+                               Foreground="{DynamicResource LumenAccentBrush}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <Border CornerRadius="12" ClipToBounds="True">
+                    <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
+                  </Border>
+                </Panel>
+                <TextBlock Text="{Binding DisplayName}" FontSize="11" TextAlignment="Center" TextTrimming="CharacterEllipsis"
+                           Foreground="{DynamicResource LumenTextBrush}" />
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

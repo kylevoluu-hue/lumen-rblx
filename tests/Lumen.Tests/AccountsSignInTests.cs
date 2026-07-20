@@ -1,4 +1,7 @@
+using System.Net.Http;
 using Lumen.Accounts;
+using Lumen.Roblox;
+using Lumen.Security;
 using Lumen.Storage;
 using Lumen.UI.ViewModels.Pages;
 using Xunit;
@@ -13,7 +16,8 @@ public class AccountsSignInTests
         using var temp = new TempDirectory();
         var launcher = new FakeProcessLauncher();
         var accounts = new AccountManager(new JsonFileStore(), temp.AsLumenPaths(), new UnavailableCredentialStore());
-        var viewModel = new AccountsViewModel(accounts, launcher);
+        var web = new RobloxWebClient(new HttpClient(), UrlValidator.CreateDefault());
+        var viewModel = new AccountsViewModel(accounts, launcher, web);
 
         viewModel.SignInCommand.Execute(null);
 

@@ -1,54 +1,48 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:models="using:Lumen.Core.Models"
              x:Class="Lumen.UI.Views.Pages.HomeView"
              x:DataType="pages:HomeViewModel"
              x:CompileBindings="True">
 
-  <StackPanel Spacing="18">
+  <StackPanel x:Name="Root" Spacing="18" Classes="pageRoot">
     <StackPanel Spacing="4">
-      <TextBlock Text="{Binding Title}" FontSize="30" FontWeight="Bold" Foreground="#EAF0FA" />
-      <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#8595B2" />
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Description}" Classes="subtitle" />
     </StackPanel>
 
-    <Button Command="{Binding LaunchCommand}"
-            HorizontalAlignment="Left"
-            Padding="26,14"
-            FontSize="16"
-            FontWeight="SemiBold"
-            Background="#3D6BFF"
-            Foreground="White"
-            CornerRadius="10"
-            Content="▶  Launch Roblox" />
-    <TextBlock Text="{Binding LastLaunchStatus}" FontSize="12" Foreground="#6F7E99" />
+    <Button Command="{Binding LaunchCommand}" Classes="accent" HorizontalAlignment="Left"
+            Padding="26,14" FontSize="16" Content="▶  Launch Roblox" />
+    <TextBlock Text="{Binding LastLaunchStatus}" Classes="caption" />
 
     <WrapPanel>
-      <Border Classes="card">
+      <Border Classes="card stat">
         <StackPanel Spacing="6">
           <TextBlock Classes="label" Text="ACCOUNT" />
           <TextBlock Classes="value" Text="{Binding SelectedAccount}" />
         </StackPanel>
       </Border>
-      <Border Classes="card">
+      <Border Classes="card stat">
         <StackPanel Spacing="6">
           <TextBlock Classes="label" Text="PROFILE" />
           <TextBlock Classes="value" Text="{Binding CurrentProfile}" />
         </StackPanel>
       </Border>
-      <Border Classes="card">
+      <Border Classes="card stat">
         <StackPanel Spacing="6">
           <TextBlock Classes="label" Text="ROBLOX" />
           <TextBlock Classes="value" Text="{Binding RobloxStatus}" />
           <TextBlock Classes="label" Text="{Binding RobloxVersion}" />
         </StackPanel>
       </Border>
-      <Border Classes="card">
+      <Border Classes="card stat">
         <StackPanel Spacing="6">
           <TextBlock Classes="label" Text="LUMEN VERSION" />
           <TextBlock Classes="value" Text="{Binding LumenVersion}" />
         </StackPanel>
       </Border>
-      <Border Classes="card">
+      <Border Classes="card stat">
         <StackPanel Spacing="6">
           <TextBlock Classes="label" Text="ENABLED MODS" />
           <TextBlock Classes="value" Text="{Binding EnabledModCount}" />
@@ -56,8 +50,29 @@
       </Border>
     </WrapPanel>
 
-    <Border Background="#141B2A" CornerRadius="10" Padding="16">
-      <TextBlock Text="{Binding Disclaimer}" TextWrapping="Wrap" FontSize="12" Foreground="#8595B2" />
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock Classes="label" Text="RECENT (LAUNCHED VIA LUMEN)" />
+        <ItemsControl ItemsSource="{Binding RecentExperiences}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:RecentExperience">
+              <Grid ColumnDefinitions="*,Auto" Margin="0,3">
+                <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource LumenTextBrush}" />
+                <Button Grid.Column="1" Classes="subtle" Content="Play"
+                        Command="{Binding #Root.((pages:HomeViewModel)DataContext).PlayRecentCommand}"
+                        CommandParameter="{Binding}" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Classes="caption" TextWrapping="Wrap"
+                   Text="Launch an experience to see it here. This is Lumen's own history — your Roblox play history is private and Lumen never reads it." />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <TextBlock Text="{Binding Disclaimer}" TextWrapping="Wrap" Classes="caption" />
     </Border>
   </StackPanel>
 </UserControl>

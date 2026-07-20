@@ -17,9 +17,13 @@ public sealed partial class AccountsViewModel : PageViewModel
 
     private readonly IAccountManager _accounts;
     private readonly IProcessLauncher _launcher;
+    private readonly IRobloxWebClient _web;
 
     [ObservableProperty]
     private string _newNickname = string.Empty;
+
+    [ObservableProperty]
+    private string _linkUsername = string.Empty;
 
     [ObservableProperty]
     private string _statusMessage = string.Empty;
@@ -27,10 +31,11 @@ public sealed partial class AccountsViewModel : PageViewModel
     [ObservableProperty]
     private Account? _selectedAccount;
 
-    public AccountsViewModel(IAccountManager accounts, IProcessLauncher launcher)
+    public AccountsViewModel(IAccountManager accounts, IProcessLauncher launcher, IRobloxWebClient web)
     {
         _accounts = accounts;
         _launcher = launcher;
+        _web = web;
     }
 
     public override string Title => "Accounts";
@@ -46,6 +51,46 @@ public sealed partial class AccountsViewModel : PageViewModel
     public override async Task InitializeAsync()
     {
         await _accounts.LoadAsync().ConfigureAwait(true);
+        RefreshList();
+    }
+
+    /// <summary>Links a Roblox account by public username: resolves the user id and public profile.</summary>
+    [RelayCommand]
+    private async Task LinkAsync()
+    {
+        if (string.IsNullOrWhiteSpace(LinkUsername))
+        {
+            StatusMessage = "Enter a Roblox username to link.";
+            return;
+        }
+
+        StatusMessage = "Looking up Roblox user…";
+        var id = await _web.ResolveUsernameAsync(LinkUsername).ConfigureAwait(true);
+        if (id.IsFailure)
+        {
+            StatusMessage = id.Error!;
+            return;
+        }
+
+        var user = await _web.GetUserAsync(id.Value).ConfigureAwait(true);
+        var avatar = await _web.GetAvatarHeadshotUrlAsync(id.Value).ConfigureAwait(true);
+
+        var added = await _accounts.AddAsync(user.IsSuccess ? user.Value!.DisplayName : LinkUsername.Trim()).ConfigureAwait(true);
+        if (added.IsFailure)
+        {
+            StatusMessage = added.Error!;
+            return;
+        }
+
+        var account = added.Value!;
+        account.UserId = id.Value;
+        account.Username = user.IsSuccess ? user.Value!.Username : LinkUsername.Trim();
+        account.DisplayName = user.IsSuccess ? user.Value!.DisplayName : null;
+        account.AvatarUrl = avatar.IsSuccess ? avatar.Value : null;
+        await _accounts.UpdateAsync(account).ConfigureAwait(true);
+
+        LinkUsername = string.Empty;
+        StatusMessage = $"Linked {account.DisplayLabel} (public profile only).";
         RefreshList();
     }
 
