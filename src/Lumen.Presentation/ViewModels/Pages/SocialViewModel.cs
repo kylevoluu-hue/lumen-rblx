@@ -1,12 +1,14 @@
 using System.Collections.ObjectModel;
-using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lumen.Core.Abstractions;
 
 namespace Lumen.UI.ViewModels.Pages;
 
-/// <summary>A friend card. Avatar loads asynchronously; the name shows immediately.</summary>
+/// <summary>
+/// A friend card. The avatar is held as raw image bytes (framework-agnostic); each UI head converts
+/// the bytes to its own image type. The name shows immediately; the avatar loads asynchronously.
+/// </summary>
 public sealed partial class FriendItemViewModel : ObservableObject
 {
     public FriendItemViewModel(string displayName, string handle)
@@ -22,7 +24,7 @@ public sealed partial class FriendItemViewModel : ObservableObject
     public string Initial => string.IsNullOrEmpty(DisplayName) ? "?" : DisplayName[..1].ToUpperInvariant();
 
     [ObservableProperty]
-    private Bitmap? _avatar;
+    private byte[]? _avatarBytes;
 }
 
 /// <summary>
@@ -47,7 +49,7 @@ public sealed partial class SocialViewModel : PageViewModel
     private string? _profileDescription;
 
     [ObservableProperty]
-    private Bitmap? _profileAvatar;
+    private byte[]? _profileAvatarBytes;
 
     [ObservableProperty]
     private string _statusMessage = string.Empty;
@@ -93,7 +95,7 @@ public sealed partial class SocialViewModel : PageViewModel
         var avatar = await _web.GetAvatarHeadshotUrlAsync(userId).ConfigureAwait(true);
         if (avatar.IsSuccess)
         {
-            ProfileAvatar = await LoadBitmapAsync(avatar.Value!).ConfigureAwait(true);
+            ProfileAvatarBytes = await LoadBytesAsync(avatar.Value!).ConfigureAwait(true);
         }
 
         Friends.Clear();
@@ -119,26 +121,13 @@ public sealed partial class SocialViewModel : PageViewModel
         var url = await _web.GetAvatarHeadshotUrlAsync(userId).ConfigureAwait(true);
         if (url.IsSuccess)
         {
-            item.Avatar = await LoadBitmapAsync(url.Value!).ConfigureAwait(true);
+            item.AvatarBytes = await LoadBytesAsync(url.Value!).ConfigureAwait(true);
         }
     }
 
-    private async Task<Bitmap?> LoadBitmapAsync(string url)
+    private async Task<byte[]?> LoadBytesAsync(string url)
     {
         var bytes = await _web.GetImageAsync(url).ConfigureAwait(true);
-        if (bytes.IsFailure)
-        {
-            return null;
-        }
-
-        try
-        {
-            using var stream = new MemoryStream(bytes.Value!);
-            return new Bitmap(stream);
-        }
-        catch (Exception)
-        {
-            return null;
-        }
+        return bytes.IsSuccess ? bytes.Value : null;
     }
 }

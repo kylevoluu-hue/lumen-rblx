@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lumen.Core\Lumen.Core.csproj" />
+    <ProjectReference Include="..\Lumen.Presentation\Lumen.Presentation.csproj" />
   </ItemGroup>
 
 </Project>

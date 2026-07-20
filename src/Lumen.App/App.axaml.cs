@@ -27,7 +27,7 @@ public partial class App : Application
             services.GetRequiredService<IProfileService>().LoadAsync().GetAwaiter().GetResult();
 
             // Apply the saved accent colour before the first window renders.
-            UI.Theming.ThemeApplier.ApplyAccent(settings.Current.Appearance.AccentColor);
+            services.GetRequiredService<Lumen.UI.Theming.IThemeApplier>().ApplyAccent(settings.Current.Appearance.AccentColor);
 
             desktop.MainWindow = new MainWindow
             {

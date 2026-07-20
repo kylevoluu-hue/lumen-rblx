@@ -3,10 +3,10 @@ using Avalonia.Media;
 
 namespace Lumen.UI.Theming;
 
-/// <summary>Applies cosmetic theme choices (currently the accent colour) to the live app resources.</summary>
-public static class ThemeApplier
+/// <summary>Avalonia implementation of <see cref="IThemeApplier"/>: updates live app resources.</summary>
+public sealed class AvaloniaThemeApplier : IThemeApplier
 {
-    public static void ApplyAccent(string? hex)
+    public void ApplyAccent(string? hex)
     {
         if (Application.Current is null || string.IsNullOrWhiteSpace(hex) || !Color.TryParse(hex, out var color))
         {

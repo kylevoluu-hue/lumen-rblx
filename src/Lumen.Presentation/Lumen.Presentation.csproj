@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Framework-agnostic presentation layer: view-models, navigation, and UI-facing
+    abstractions shared by every UI head (Avalonia today, WinUI 3 on Windows).
+    It references only Lumen.Core and the MVVM toolkit — no UI framework — so both
+    heads can consume the exact same view-models.
+  -->
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lumen.Core\Lumen.Core.csproj" />
+  </ItemGroup>
+
+</Project>

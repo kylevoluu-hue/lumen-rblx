@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:conv="using:Lumen.UI.Converters"
              x:Class="Lumen.UI.Views.Pages.SettingsView"
              x:DataType="pages:SettingsViewModel"
              x:CompileBindings="True">
@@ -24,7 +25,8 @@
           <ListBox.ItemTemplate>
             <DataTemplate x:DataType="pages:AccentOption">
               <StackPanel Spacing="5" Margin="2" Width="76">
-                <Border Width="66" Height="40" CornerRadius="8" Background="{Binding Swatch}" />
+                <Border Width="66" Height="40" CornerRadius="8"
+                        Background="{Binding Hex, Converter={x:Static conv:HexToBrushConverter.Instance}}" />
                 <TextBlock Text="{Binding Name}" FontSize="10" HorizontalAlignment="Center"
                            Foreground="{DynamicResource LumenTextMutedBrush}" />
               </StackPanel>

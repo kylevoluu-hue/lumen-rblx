@@ -1,0 +1,23 @@
+<Window
+    x:Class="Lumen.WinUI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls">
+
+    <NavigationView x:Name="Nav"
+                    PaneDisplayMode="Left"
+                    IsBackButtonVisible="Collapsed"
+                    IsSettingsVisible="False"
+                    SelectionChanged="OnNavSelectionChanged">
+        <Grid Padding="28">
+            <StackPanel Spacing="10" MaxWidth="720" HorizontalAlignment="Left">
+                <TextBlock x:Name="PageTitle" Style="{StaticResource TitleTextBlockStyle}" />
+                <TextBlock x:Name="PageDescription" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8" Padding="16" Margin="0,12,0,0">
+                    <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               Text="This page's WinUI view is being ported. The shared view-model behind it (identical to the Avalonia head) is already wired through dependency injection." />
+                </Border>
+            </StackPanel>
+        </Grid>
+    </NavigationView>
+</Window>

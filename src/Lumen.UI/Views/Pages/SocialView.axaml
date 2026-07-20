@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:conv="using:Lumen.UI.Converters"
              x:Class="Lumen.UI.Views.Pages.SocialView"
              x:DataType="pages:SocialViewModel"
              x:CompileBindings="True">
@@ -28,7 +29,7 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Border>
           <Border CornerRadius="14" ClipToBounds="True">
-            <Image Source="{Binding ProfileAvatar}" Stretch="UniformToFill" />
+            <Image Source="{Binding ProfileAvatarBytes, Converter={x:Static conv:BytesToBitmapConverter.Instance}}" Stretch="UniformToFill" />
           </Border>
         </Panel>
         <StackPanel Spacing="3" VerticalAlignment="Center">
@@ -62,7 +63,7 @@
                                HorizontalAlignment="Center" VerticalAlignment="Center" />
                   </Border>
                   <Border CornerRadius="12" ClipToBounds="True">
-                    <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
+                    <Image Source="{Binding AvatarBytes, Converter={x:Static conv:BytesToBitmapConverter.Instance}}" Stretch="UniformToFill" />
                   </Border>
                 </Panel>
                 <TextBlock Text="{Binding DisplayName}" FontSize="11" TextAlignment="Center" TextTrimming="CharacterEllipsis"

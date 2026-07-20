@@ -21,27 +21,25 @@ build. This Phase 1 document therefore describes the **target architecture** and
 requested service onto **what already exists vs. what is new**, so we evolve the codebase rather
 than restart it.
 
-## Decision points requiring your confirmation before Phase 2
+## Decisions (confirmed)
 
-1. **UI framework — Avalonia (recommended) vs. WinUI 3 (spec default).** The spec asks for WinUI 3.
-   The spec also permits deviation "unless a technical limitation makes another choice clearly
-   better." Two hard facts make Avalonia the better choice here:
-   - This build/CI environment is **Linux**. WinUI 3 is Windows-only and **cannot be compiled,
-     run, or tested here at all**; Avalonia builds, runs headless, and unit-tests on this
-     environment while still shipping a **native Windows** app.
-   - Avalonia is **already implemented** across the UI and would otherwise be thrown away.
+1. **UI framework — support BOTH, on one shared core (confirmed: "use both if you can").** The UI
+   is now split so any front-end can drive it:
+   - `Lumen.Presentation` — **framework-agnostic** view-models + navigation + `IThemeApplier`
+     abstraction (references only `Lumen.Core` + the MVVM toolkit; no Avalonia/WinUI).
+   - `Lumen.Composition` — **UI-agnostic** service registration (`AddLumenServices`). Both heads
+     build an identical service graph and add only their own `IThemeApplier`.
+   - `Lumen.App` (**Avalonia head**) — the verified, cross-platform-buildable, shipping app.
+   - `Lumen.WinUI` (**WinUI 3 head**) — reuses the same services and view-models; only views +
+     theme applier are WinUI-specific. **Windows-only: it cannot compile in this Linux
+     environment, so it is excluded from `Lumen.sln` and is an unverified skeleton to build/iterate
+     on Windows** (`dotnet build src/Lumen.WinUI`). See `src/Lumen.WinUI/README.md`.
 
-   WinUI 3 would give slightly more "native" Windows 11 Mica/acrylic and Fluent controls, at the
-   cost of Windows-only development and a full UI rewrite. **Recommendation: keep Avalonia.** If you
-   require WinUI 3, the shared libraries (`Lumen.Core` and all services below) are UI-agnostic and
-   would be reused unchanged; only `Lumen.UI`/`Lumen.App` would be re-targeted, and the project
-   could then only be built on a Windows machine.
+   Result: the Avalonia head remains the fully-tested, runnable app today; the WinUI head is a real
+   second front-end sharing 100% of the services and view-models, finished on Windows.
 
-2. **Naming — keep `Lumen.*` (recommended) vs. rename to `LumenLauncher.*`.** The spec uses
-   `LumenLauncher.*` project names. The working code uses `Lumen.*`. The product display name can be
-   **"Lumen Launcher"** regardless of assembly names. Renaming 20+ projects is churn with no
-   functional benefit. **Recommendation: keep `Lumen.*` namespaces; use "Lumen Launcher" as the
-   product name.** The layer mapping to your requested 8-project structure is in §3.
+2. **Naming — keep `Lumen.*` (confirmed).** Assembly/namespace names stay `Lumen.*`; the product
+   display name is **"Lumen Launcher"**. The mapping to the spec's 8-project layout is in §3.
 
 3. **Full Roblox client *installation* (download-from-scratch) vs. *detect-and-launch* baseline.**
    See §7 and §17. This is the single biggest new capability and the most brittle. It is proposed
@@ -120,8 +118,11 @@ Lumen.sln
 ├── global.json                  # SDK pin
 ├── nuget.config
 ├── src/
-│   ├── Lumen.App                # Avalonia host + Composition.cs (DI root) + app.manifest
-│   ├── Lumen.UI                 # Views + view-models + ViewLocator + navigation shell + theming
+│   ├── Lumen.App                # Avalonia head: host + composition (adds Avalonia IThemeApplier)
+│   ├── Lumen.WinUI              # WinUI 3 head (Windows-only; excluded from Lumen.sln; skeleton)
+│   ├── Lumen.UI                 # Avalonia views + ViewLocator + converters + AvaloniaThemeApplier
+│   ├── Lumen.Presentation       # SHARED framework-agnostic view-models + navigation + IThemeApplier
+│   ├── Lumen.Composition        # SHARED UI-agnostic service registration (AddLumenServices)
 │   ├── Lumen.Core               # Models, Result<T>, configuration, ALL service interfaces
 │   ├── Lumen.Security           # PathSafety, SafeArchiveExtractor, FileHashing, UrlValidator,
 │   │                            #   Redactor, ProcessArguments

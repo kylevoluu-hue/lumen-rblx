@@ -1,16 +1,12 @@
 using System.Collections.ObjectModel;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Lumen.Core.Configuration;
 using Lumen.UI.Theming;
 
 namespace Lumen.UI.ViewModels.Pages;
 
-/// <summary>A named accent colour choice.</summary>
-public sealed record AccentOption(string Name, string Hex)
-{
-    public IBrush Swatch => new SolidColorBrush(Color.Parse(Hex));
-}
+/// <summary>A named accent colour choice (framework-agnostic; the view renders the swatch from Hex).</summary>
+public sealed record AccentOption(string Name, string Hex);
 
 /// <summary>
 /// Lumen appearance settings. The accent colour is applied live and persisted. All settings are
@@ -19,6 +15,7 @@ public sealed record AccentOption(string Name, string Hex)
 public sealed partial class SettingsViewModel : PageViewModel
 {
     private readonly ISettingsService _settings;
+    private readonly IThemeApplier _themeApplier;
     private bool _loaded;
 
     [ObservableProperty]
@@ -27,9 +24,10 @@ public sealed partial class SettingsViewModel : PageViewModel
     [ObservableProperty]
     private bool _compactMode;
 
-    public SettingsViewModel(ISettingsService settings)
+    public SettingsViewModel(ISettingsService settings, IThemeApplier themeApplier)
     {
         _settings = settings;
+        _themeApplier = themeApplier;
     }
 
     public override string Title => "Lumen Settings";
@@ -63,7 +61,7 @@ public sealed partial class SettingsViewModel : PageViewModel
             return;
         }
 
-        ThemeApplier.ApplyAccent(value.Hex);
+        _themeApplier.ApplyAccent(value.Hex);
         _ = _settings.UpdateAsync(s => s.Appearance.AccentColor = value.Hex);
     }
 

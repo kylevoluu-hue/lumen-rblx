@@ -1,24 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!--
+    UI-agnostic composition: registers every Lumen service and shared view-model into a
+    ServiceCollection. Both UI heads (Avalonia, WinUI 3) call AddLumenServices() and then add only
+    their own IThemeApplier implementation, so the two front-ends share one identical service graph.
+    This project references no UI framework.
+  -->
+
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyName>Lumen</AssemblyName>
-    <RootNamespace>Lumen.App</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lumen.UI\Lumen.UI.csproj" />
     <ProjectReference Include="..\Lumen.Core\Lumen.Core.csproj" />
     <ProjectReference Include="..\Lumen.Security\Lumen.Security.csproj" />
     <ProjectReference Include="..\Lumen.Storage\Lumen.Storage.csproj" />
@@ -29,7 +27,6 @@
     <ProjectReference Include="..\Lumen.Profiles\Lumen.Profiles.csproj" />
     <ProjectReference Include="..\Lumen.Launching\Lumen.Launching.csproj" />
     <ProjectReference Include="..\Lumen.Presentation\Lumen.Presentation.csproj" />
-    <ProjectReference Include="..\Lumen.Composition\Lumen.Composition.csproj" />
   </ItemGroup>
 
 </Project>

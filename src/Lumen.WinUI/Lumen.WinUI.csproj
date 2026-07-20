@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    WinUI 3 head. Reuses the shared services (Lumen.Composition) and view-models
+    (Lumen.Presentation) — only the views and the IThemeApplier are WinUI-specific.
+
+    NOTE: This project targets net8.0-windows and the Windows App SDK, so it can ONLY be built on
+    Windows. It is intentionally NOT part of Lumen.sln (which stays cross-platform / CI-green).
+    Build it on Windows via Lumen.Windows.sln or `dotnet build src/Lumen.WinUI`. It has not been
+    compiled in this repository's Linux environment — see README.md in this folder.
+  -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>Lumen.WinUI</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <UseWinUI>true</UseWinUI>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lumen.Composition\Lumen.Composition.csproj" />
+    <ProjectReference Include="..\Lumen.Presentation\Lumen.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>
