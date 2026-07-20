@@ -1,6 +1,29 @@
+using Lumen.Core.Abstractions;
 using Lumen.Core.Common;
 
 namespace Lumen.Tests;
+
+/// <summary>Records the last URL a caller tried to launch, without touching the real OS.</summary>
+public sealed class FakeProcessLauncher : IProcessLauncher
+{
+    public string? LastUrl { get; private set; }
+
+    public bool Succeed { get; set; } = true;
+
+    public Result LaunchUrl(string url)
+    {
+        LastUrl = url;
+        return Succeed ? Result.Success() : Result.Failure("fake launcher failure");
+    }
+}
+
+/// <summary>Captures progress reports synchronously (unlike <see cref="Progress{T}"/>).</summary>
+public sealed class SyncProgress<T> : IProgress<T>
+{
+    public List<T> Items { get; } = new();
+
+    public void Report(T value) => Items.Add(value);
+}
 
 /// <summary>A disposable temporary directory for tests that touch the filesystem.</summary>
 public sealed class TempDirectory : IDisposable

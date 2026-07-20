@@ -2,6 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lumen.Core\Lumen.Core.csproj" />
+    <ProjectReference Include="..\Lumen.Roblox\Lumen.Roblox.csproj" />
+    <ProjectReference Include="..\Lumen.Security\Lumen.Security.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

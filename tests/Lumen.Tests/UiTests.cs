@@ -15,7 +15,7 @@ public class ShellViewModelTests
             new("home", "Home", "H", new PlaceholderPageViewModel("Home", "desc", "note")),
             new("about", "About", "A", new PlaceholderPageViewModel("About", "desc", "note")),
         };
-        return new ShellViewModel(entries);
+        return new ShellViewModel(entries, new NavigationService());
     }
 
     [Fact]

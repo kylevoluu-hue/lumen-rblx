@@ -4,6 +4,7 @@ using Lumen.Core.Abstractions;
 using Lumen.Core.Common;
 using Lumen.Core.Configuration;
 using Lumen.Core.Models;
+using Lumen.UI.Navigation;
 
 namespace Lumen.UI.ViewModels.Pages;
 
@@ -18,6 +19,7 @@ public sealed partial class HomeViewModel : PageViewModel
     private readonly IAccountManager _accounts;
     private readonly IProfileService _profiles;
     private readonly IRobloxInstallationLocator _locator;
+    private readonly INavigationService _navigation;
 
     [ObservableProperty]
     private string _selectedAccount = "No account selected";
@@ -41,12 +43,14 @@ public sealed partial class HomeViewModel : PageViewModel
         ISettingsService settings,
         IAccountManager accounts,
         IProfileService profiles,
-        IRobloxInstallationLocator locator)
+        IRobloxInstallationLocator locator,
+        INavigationService navigation)
     {
         _settings = settings;
         _accounts = accounts;
         _profiles = profiles;
         _locator = locator;
+        _navigation = navigation;
     }
 
     public override string Title => "Home";
@@ -86,11 +90,5 @@ public sealed partial class HomeViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private void Launch()
-    {
-        // Launching hands off to the installed, already-signed-in Roblox client on Windows.
-        LastLaunchStatus = OperatingSystem.IsWindows()
-            ? "Launching requires an official Roblox installation; this is wired up in a later phase."
-            : "Launching is available on Windows with Roblox installed.";
-    }
+    private void Launch() => _navigation.NavigateTo("launch");
 }

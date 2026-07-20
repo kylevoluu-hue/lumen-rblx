@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:sys="using:System"
+             x:Class="Lumen.UI.Views.Pages.ModsView"
+             x:DataType="pages:ModsViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" MaxWidth="680" HorizontalAlignment="Left" Classes="pageRoot">
+    <StackPanel Spacing="6">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Classes="accent" Content="Import .lumenmod" Click="OnImportClick" />
+          <Button Classes="subtle" Content="Restore originals" Command="{Binding RestoreCommand}" />
+        </StackPanel>
+        <TextBlock Text="{Binding StatusMessage}" Classes="caption" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="label" Text="ACTIVITY" />
+        <ItemsControl ItemsSource="{Binding Activity}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="sys:String">
+              <TextBlock Text="{Binding}" Classes="body" TextWrapping="Wrap" Margin="0,2" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="caption" TextWrapping="Wrap"
+               Text="Only safe cosmetic files are accepted — executables, scripts, path-traversal, and hidden files are blocked. A passing scan reduces risk but is not a guarantee of absolute safety; install mods only from sources you trust." />
+  </StackPanel>
+</UserControl>

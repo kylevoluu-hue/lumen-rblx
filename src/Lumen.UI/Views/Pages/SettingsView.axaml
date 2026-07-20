@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.SettingsView"
+             x:DataType="pages:SettingsViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" MaxWidth="680" HorizontalAlignment="Left" Classes="pageRoot">
+    <StackPanel Spacing="6">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <TextBlock Classes="label" Text="ACCENT COLOUR" />
+        <ListBox ItemsSource="{Binding AccentOptions}" SelectedItem="{Binding SelectedAccent, Mode=TwoWay}"
+                 Background="Transparent" BorderThickness="0">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="pages:AccentOption">
+              <StackPanel Spacing="5" Margin="2" Width="76">
+                <Border Width="66" Height="40" CornerRadius="8" Background="{Binding Swatch}" />
+                <TextBlock Text="{Binding Name}" FontSize="10" HorizontalAlignment="Center"
+                           Foreground="{DynamicResource LumenTextMutedBrush}" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="8">
+        <CheckBox IsChecked="{Binding CompactMode, Mode=TwoWay}" Content="Compact mode" />
+        <TextBlock Classes="caption" TextWrapping="Wrap"
+                   Text="More appearance options (light/dark variant, corner radius, motion) are on the way. All settings stay on your device." />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

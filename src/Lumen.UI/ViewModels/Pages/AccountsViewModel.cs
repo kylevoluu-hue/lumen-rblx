@@ -12,7 +12,11 @@ namespace Lumen.UI.ViewModels.Pages;
 /// </summary>
 public sealed partial class AccountsViewModel : PageViewModel
 {
+    /// <summary>The official Roblox login page. Sign-in happens here, in the user's own browser.</summary>
+    public const string RobloxLoginUrl = "https://www.roblox.com/login";
+
     private readonly IAccountManager _accounts;
+    private readonly IProcessLauncher _launcher;
 
     [ObservableProperty]
     private string _newNickname = string.Empty;
@@ -23,9 +27,10 @@ public sealed partial class AccountsViewModel : PageViewModel
     [ObservableProperty]
     private Account? _selectedAccount;
 
-    public AccountsViewModel(IAccountManager accounts)
+    public AccountsViewModel(IAccountManager accounts, IProcessLauncher launcher)
     {
         _accounts = accounts;
+        _launcher = launcher;
     }
 
     public override string Title => "Accounts";
@@ -42,6 +47,16 @@ public sealed partial class AccountsViewModel : PageViewModel
     {
         await _accounts.LoadAsync().ConfigureAwait(true);
         RefreshList();
+    }
+
+    /// <summary>Opens Roblox's official login page in the default browser (the supported sign-in method).</summary>
+    [RelayCommand]
+    private void SignIn()
+    {
+        var result = _launcher.LaunchUrl(RobloxLoginUrl);
+        StatusMessage = result.IsSuccess
+            ? "Opened the official Roblox login page in your browser. After signing in there, launches use that session."
+            : (result.Error ?? "Could not open the browser.");
     }
 
     [RelayCommand]

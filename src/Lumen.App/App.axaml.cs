@@ -21,9 +21,13 @@ public partial class App : Application
 
             // Prepare local storage and load persisted state before the first view binds.
             services.GetRequiredService<ILumenPaths>().EnsureCreated();
-            services.GetRequiredService<ISettingsService>().LoadAsync().GetAwaiter().GetResult();
+            var settings = services.GetRequiredService<ISettingsService>();
+            settings.LoadAsync().GetAwaiter().GetResult();
             services.GetRequiredService<IAccountManager>().LoadAsync().GetAwaiter().GetResult();
             services.GetRequiredService<IProfileService>().LoadAsync().GetAwaiter().GetResult();
+
+            // Apply the saved accent colour before the first window renders.
+            UI.Theming.ThemeApplier.ApplyAccent(settings.Current.Appearance.AccentColor);
 
             desktop.MainWindow = new MainWindow
             {

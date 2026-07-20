@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.LaunchView"
+             x:DataType="pages:LaunchViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" MaxWidth="680" HorizontalAlignment="Left" Classes="pageRoot">
+    <StackPanel Spacing="6">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Border Classes="card">
+      <StackPanel Spacing="14">
+        <TextBlock Classes="label" Text="EXPERIENCE" />
+        <TextBox Watermark="e.g. 1818 or https://www.roblox.com/games/1818/Classic-Crossroads"
+                 Text="{Binding Input, Mode=TwoWay}" />
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Classes="accent"
+                  Content="▶  Launch"
+                  Command="{Binding LaunchCommand}"
+                  IsEnabled="{Binding !IsLaunching}" />
+          <TextBlock Text="{Binding Status}" VerticalAlignment="Center" Classes="caption" TextWrapping="Wrap" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <TextBlock Classes="caption" TextWrapping="Wrap"
+               Text="Lumen opens the experience through Roblox's official launch link and hands off to the Roblox client you are already signed in to. It never handles your credentials or injects into Roblox." />
+  </StackPanel>
+</UserControl>
