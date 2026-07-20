@@ -33,6 +33,8 @@
         </ItemsControl>
         <TextBlock Text="Lumen never sells data, and never uploads launch history, keystrokes, or overlay data."
                    TextWrapping="Wrap" FontSize="12" Foreground="#8595B2" Margin="0,6,0,0" />
+        <TextBlock Text="Network: Lumen contacts roblox.com only to show the public profile and friends of accounts you link (Social page). No cookies or private data are ever sent."
+                   TextWrapping="Wrap" FontSize="12" Foreground="#8595B2" />
       </StackPanel>
     </Border>
   </StackPanel>

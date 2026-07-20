@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.PlaceholderPageView"
+             x:DataType="pages:PlaceholderPageViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" MaxWidth="680" HorizontalAlignment="Left" Classes="pageRoot">
+    <StackPanel Spacing="6">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Border Classes="card panel">
+      <StackPanel Spacing="10">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Border Background="{DynamicResource LumenAccentSoftBrush}" CornerRadius="6" Padding="8,3">
+            <TextBlock Text="ROADMAP" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource LumenAccentBrush}" />
+          </Border>
+        </StackPanel>
+        <TextBlock Text="{Binding RoadmapNote}" TextWrapping="Wrap" Classes="body" />
+        <TextBlock Text="The service interfaces this page will use are already defined, so this screen slots in without rework."
+                   TextWrapping="Wrap" Classes="caption" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -21,10 +21,21 @@ public sealed partial class ShellViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isSidebar = true;
 
-    public ShellViewModel(IEnumerable<NavigationEntry> entries)
+    public ShellViewModel(IEnumerable<NavigationEntry> entries, INavigationService navigation)
     {
         Entries = new ObservableCollection<NavigationEntry>(entries);
         SelectedEntry = Entries.FirstOrDefault();
+
+        navigation.NavigationRequested += OnNavigationRequested;
+    }
+
+    private void OnNavigationRequested(string pageId)
+    {
+        var entry = Entries.FirstOrDefault(e => e.Id == pageId);
+        if (entry is not null)
+        {
+            SelectedEntry = entry;
+        }
     }
 
     public ObservableCollection<NavigationEntry> Entries { get; }

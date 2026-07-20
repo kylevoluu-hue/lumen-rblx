@@ -1,9 +1,11 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lumen.Core.Abstractions;
 using Lumen.Core.Common;
 using Lumen.Core.Configuration;
 using Lumen.Core.Models;
+using Lumen.UI.Navigation;
 
 namespace Lumen.UI.ViewModels.Pages;
 
@@ -18,6 +20,9 @@ public sealed partial class HomeViewModel : PageViewModel
     private readonly IAccountManager _accounts;
     private readonly IProfileService _profiles;
     private readonly IRobloxInstallationLocator _locator;
+    private readonly INavigationService _navigation;
+    private readonly IRecentExperienceStore _recent;
+    private readonly ILaunchService _launch;
 
     [ObservableProperty]
     private string _selectedAccount = "No account selected";
@@ -41,13 +46,21 @@ public sealed partial class HomeViewModel : PageViewModel
         ISettingsService settings,
         IAccountManager accounts,
         IProfileService profiles,
-        IRobloxInstallationLocator locator)
+        IRobloxInstallationLocator locator,
+        INavigationService navigation,
+        IRecentExperienceStore recent,
+        ILaunchService launch)
     {
         _settings = settings;
         _accounts = accounts;
         _profiles = profiles;
         _locator = locator;
+        _navigation = navigation;
+        _recent = recent;
+        _launch = launch;
     }
+
+    public ObservableCollection<RecentExperience> RecentExperiences { get; } = new();
 
     public override string Title => "Home";
 
@@ -83,14 +96,31 @@ public sealed partial class HomeViewModel : PageViewModel
         {
             RobloxStatus = "Unknown";
         }
+
+        await _recent.LoadAsync().ConfigureAwait(true);
+        RecentExperiences.Clear();
+        foreach (var experience in _recent.Recent.Take(8))
+        {
+            RecentExperiences.Add(experience);
+        }
     }
 
     [RelayCommand]
-    private void Launch()
+    private void Launch() => _navigation.NavigateTo("launch");
+
+    [RelayCommand]
+    private async Task PlayRecentAsync(RecentExperience? experience)
     {
-        // Launching hands off to the installed, already-signed-in Roblox client on Windows.
-        LastLaunchStatus = OperatingSystem.IsWindows()
-            ? "Launching requires an official Roblox installation; this is wired up in a later phase."
-            : "Launching is available on Windows with Roblox installed.";
+        if (experience is null)
+        {
+            return;
+        }
+
+        var target = new ExperienceTarget { Kind = ExperienceLinkKind.PlaceId, PlaceId = experience.PlaceId };
+        var result = await _launch.LaunchAsync(target).ConfigureAwait(true);
+        LastLaunchStatus = result.IsSuccess
+            ? $"Launching {experience.Name ?? experience.PlaceId.ToString()}…"
+            : result.Error!;
+        await _recent.RecordAsync(experience.PlaceId, experience.Name).ConfigureAwait(true);
     }
 }

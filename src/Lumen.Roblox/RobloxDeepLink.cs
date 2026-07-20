@@ -31,4 +31,29 @@ public static class RobloxDeepLink
 
         return Result.Success(url);
     }
+
+    /// <summary>
+    /// Builds the best link to actually start the experience. For a place or experience URL this
+    /// is the official <c>roblox://</c> app deep link, which launches the installed, already
+    /// signed-in Roblox client directly into the experience. Private servers fall back to the
+    /// official web link carrying the (never-logged) private-server code.
+    /// </summary>
+    public static Result<string> BuildLaunchLink(ExperienceTarget target)
+    {
+        ArgumentNullException.ThrowIfNull(target);
+
+        if (target.PlaceId is not > 0)
+        {
+            return Result.Failure<string>("A place id is required to build a launch link.");
+        }
+
+        // Private-server joins are only reliable through the official web link + code.
+        if (target.Kind == ExperienceLinkKind.PrivateServer && target.HasPrivateServerCode)
+        {
+            return Build(target);
+        }
+
+        var placeId = target.PlaceId.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        return Result.Success($"roblox://experiences/start?placeId={placeId}");
+    }
 }

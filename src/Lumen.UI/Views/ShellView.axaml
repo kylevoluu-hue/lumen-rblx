@@ -2,48 +2,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Lumen.UI.ViewModels"
              xmlns:nav="using:Lumen.UI.Navigation"
-             mc:Ignorable="d"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="Lumen.UI.Views.ShellView"
              x:DataType="vm:ShellViewModel"
              x:CompileBindings="True">
 
-  <Grid RowDefinitions="Auto,*">
+  <Grid ColumnDefinitions="238,*" Background="{DynamicResource LumenBgBrush}">
 
-    <!-- Mandatory independence disclaimer, always visible. -->
-    <Border Grid.Row="0" Background="#141B2A" Padding="16,8" BorderBrush="#232C40" BorderThickness="0,0,0,1">
-      <TextBlock Text="{Binding Disclaimer}" TextWrapping="Wrap" FontSize="11" Foreground="#8595B2" />
+    <!-- Navigation rail -->
+    <Border Grid.Column="0" Background="{DynamicResource LumenNavBrush}" BorderBrush="{DynamicResource LumenBorderBrush}" BorderThickness="0,0,1,0">
+      <DockPanel Margin="12,14,12,12">
+
+        <!-- Brand -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="6,4,6,18">
+          <Border Width="30" Height="30" CornerRadius="8" Background="{DynamicResource LumenAccentBrush}">
+            <TextBlock Text="L" FontSize="18" FontWeight="Bold" Foreground="White"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <StackPanel Spacing="0" VerticalAlignment="Center">
+            <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource LumenTextBrush}" />
+            <TextBlock Text="{Binding VersionLabel}" FontSize="10" Foreground="{DynamicResource LumenTextFaintBrush}" />
+          </StackPanel>
+        </StackPanel>
+
+        <ListBox Classes="nav"
+                 ItemsSource="{Binding Entries}"
+                 SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="nav:NavigationEntry">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Text="{Binding Glyph}" FontSize="15" Width="22" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Title}" FontSize="13" VerticalAlignment="Center" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </DockPanel>
     </Border>
 
-    <Grid Grid.Row="1" ColumnDefinitions="230,*">
+    <!-- Content region -->
+    <Grid Grid.Column="1" RowDefinitions="Auto,*">
 
-      <!-- Navigation pane -->
-      <Border Grid.Column="0" Background="#0F1420">
-        <DockPanel Margin="12">
-          <StackPanel DockPanel.Dock="Top" Margin="6,10,6,18" Spacing="2">
-            <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="Bold" Foreground="#EAF0FA" />
-            <TextBlock Text="{Binding VersionLabel}" FontSize="11" Foreground="#5E6D89" />
-          </StackPanel>
-          <ListBox ItemsSource="{Binding Entries}"
-                   SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
-                   Background="Transparent"
-                   BorderThickness="0">
-            <ListBox.ItemTemplate>
-              <DataTemplate x:DataType="nav:NavigationEntry">
-                <StackPanel Orientation="Horizontal" Spacing="12" Margin="2">
-                  <TextBlock Text="{Binding Glyph}" FontSize="15" Width="20" />
-                  <TextBlock Text="{Binding Title}" FontSize="13" VerticalAlignment="Center" />
-                </StackPanel>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-        </DockPanel>
+      <!-- Disclaimer strip -->
+      <Border Grid.Row="0" Background="{DynamicResource LumenNavBrush}" Padding="20,7"
+              BorderBrush="{DynamicResource LumenBorderBrush}" BorderThickness="0,0,0,1">
+        <TextBlock Text="{Binding Disclaimer}" TextWrapping="Wrap" FontSize="10.5"
+                   Foreground="{DynamicResource LumenTextFaintBrush}" />
       </Border>
 
-      <!-- Active page -->
-      <ScrollViewer Grid.Column="1" Background="#0B0F17">
-        <ContentControl Margin="28" Content="{Binding CurrentPage}" />
+      <ScrollViewer Grid.Row="1" Background="{DynamicResource LumenBgBrush}">
+        <TransitioningContentControl Content="{Binding CurrentPage}" Margin="28,24">
+          <TransitioningContentControl.PageTransition>
+            <CrossFade Duration="0:0:0.22" />
+          </TransitioningContentControl.PageTransition>
+        </TransitioningContentControl>
       </ScrollViewer>
     </Grid>
   </Grid>

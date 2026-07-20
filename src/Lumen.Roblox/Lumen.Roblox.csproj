@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Lumen.Core\Lumen.Core.csproj" />
     <ProjectReference Include="..\Lumen.Security\Lumen.Security.csproj" />
+    <ProjectReference Include="..\Lumen.Storage\Lumen.Storage.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

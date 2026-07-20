@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\src\Lumen.Mods\Lumen.Mods.csproj" />
     <ProjectReference Include="..\..\src\Lumen.Profiles\Lumen.Profiles.csproj" />
     <ProjectReference Include="..\..\src\Lumen.UI\Lumen.UI.csproj" />
+    <ProjectReference Include="..\..\src\Lumen.Launching\Lumen.Launching.csproj" />
   </ItemGroup>
 
 </Project>

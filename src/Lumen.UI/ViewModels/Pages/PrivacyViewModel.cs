@@ -27,6 +27,7 @@ public sealed partial class PrivacyViewModel : PageViewModel
             $"Settings — {Path.Combine("config", "settings.json")} (no secrets)",
             $"Account labels — {Path.Combine("accounts", "accounts.json")} (nicknames and public ids only)",
             $"Profiles — {Path.Combine("profiles", "profiles.json")}",
+            "Recent experiences — recent.json (what you launch via Lumen)",
             $"Logs — logs/ (local, redacted, opt-in)",
             $"Installed mods — mods/",
             $"Backups — backups/",

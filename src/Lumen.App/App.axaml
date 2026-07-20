@@ -8,27 +8,149 @@
     <ui:ViewLocator />
   </Application.DataTemplates>
 
+  <Application.Resources>
+    <!-- Theme Fluent's accent (selection bars, focus rings) to Lumen's accent. -->
+    <Color x:Key="SystemAccentColor">#6C8CFF</Color>
+    <Color x:Key="SystemAccentColorLight1">#7E9BFF</Color>
+    <Color x:Key="SystemAccentColorLight2">#9AB0FF</Color>
+    <Color x:Key="SystemAccentColorDark1">#5B79E8</Color>
+
+    <SolidColorBrush x:Key="LumenAccentBrush" Color="#6C8CFF" />
+    <SolidColorBrush x:Key="LumenAccentHoverBrush" Color="#7E9BFF" />
+    <SolidColorBrush x:Key="LumenAccentPressedBrush" Color="#5B79E8" />
+    <SolidColorBrush x:Key="LumenAccentSoftBrush" Color="#243055" />
+    <SolidColorBrush x:Key="LumenBgBrush" Color="#0B0F17" />
+    <SolidColorBrush x:Key="LumenNavBrush" Color="#0F1420" />
+    <SolidColorBrush x:Key="LumenSurfaceBrush" Color="#141B2A" />
+    <SolidColorBrush x:Key="LumenSurfaceHoverBrush" Color="#1A2336" />
+    <SolidColorBrush x:Key="LumenBorderBrush" Color="#232C40" />
+    <SolidColorBrush x:Key="LumenTextBrush" Color="#EAF0FA" />
+    <SolidColorBrush x:Key="LumenTextBodyBrush" Color="#C3CEE2" />
+    <SolidColorBrush x:Key="LumenTextMutedBrush" Color="#8595B2" />
+    <SolidColorBrush x:Key="LumenTextFaintBrush" Color="#5E6D89" />
+  </Application.Resources>
+
   <Application.Styles>
     <FluentTheme />
 
-    <Style Selector="Border.card">
-      <Setter Property="Background" Value="#141B2A" />
-      <Setter Property="CornerRadius" Value="12" />
-      <Setter Property="Padding" Value="18" />
-      <Setter Property="Margin" Value="0,0,14,14" />
-      <Setter Property="MinWidth" Value="170" />
+    <!-- Typography -->
+    <Style Selector="TextBlock.h1">
+      <Setter Property="FontSize" Value="30" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextBrush}" />
     </Style>
-
+    <Style Selector="TextBlock.h2">
+      <Setter Property="FontSize" Value="18" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextBrush}" />
+    </Style>
+    <Style Selector="TextBlock.subtitle">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextMutedBrush}" />
+    </Style>
+    <Style Selector="TextBlock.body">
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextBodyBrush}" />
+    </Style>
+    <Style Selector="TextBlock.caption">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextMutedBrush}" />
+    </Style>
     <Style Selector="TextBlock.label">
-      <Setter Property="Foreground" Value="#6F7E99" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextFaintBrush}" />
       <Setter Property="FontSize" Value="11" />
       <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
-
     <Style Selector="TextBlock.value">
-      <Setter Property="Foreground" Value="#EAF0FA" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextBrush}" />
       <Setter Property="FontSize" Value="20" />
       <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!-- Page container: gentle fade+rise entrance -->
+    <Style Selector="StackPanel.pageRoot">
+      <Style.Animations>
+        <Animation Duration="0:0:0.28" FillMode="Forward" Easing="CubicEaseOut">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="TranslateTransform.Y" Value="10" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="1" />
+            <Setter Property="TranslateTransform.Y" Value="0" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+
+    <!-- Cards -->
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource LumenSurfaceBrush}" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="18" />
+      <Setter Property="BorderBrush" Value="{DynamicResource LumenBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.18" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Border.stat">
+      <Setter Property="Margin" Value="0,0,14,14" />
+      <Setter Property="MinWidth" Value="168" />
+    </Style>
+    <Style Selector="Border.stat:pointerover">
+      <Setter Property="Background" Value="{DynamicResource LumenSurfaceHoverBrush}" />
+    </Style>
+
+    <!-- Accent (primary) button -->
+    <Style Selector="Button.accent">
+      <Setter Property="Background" Value="{DynamicResource LumenAccentBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Padding" Value="20,11" />
+      <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" Easing="CubicEaseOut" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource LumenAccentHoverBrush}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.accent:pressed">
+      <Setter Property="RenderTransform" Value="scale(0.97)" />
+    </Style>
+    <Style Selector="Button.accent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource LumenAccentPressedBrush}" />
+    </Style>
+
+    <!-- Subtle (secondary) button -->
+    <Style Selector="Button.subtle">
+      <Setter Property="Background" Value="{DynamicResource LumenSurfaceBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource LumenTextBodyBrush}" />
+      <Setter Property="CornerRadius" Value="9" />
+      <Setter Property="Padding" Value="14,9" />
+      <Setter Property="BorderBrush" Value="{DynamicResource LumenBorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="Button.subtle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource LumenSurfaceHoverBrush}" />
+    </Style>
+
+    <!-- Navigation list -->
+    <Style Selector="ListBox.nav">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem">
+      <Setter Property="Padding" Value="10,9" />
+      <Setter Property="Margin" Value="0,2" />
+      <Setter Property="CornerRadius" Value="9" />
     </Style>
   </Application.Styles>
 </Application>

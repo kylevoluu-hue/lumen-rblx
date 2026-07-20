@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             x:Class="Lumen.UI.Views.Pages.FastFlagsView"
+             x:DataType="pages:FastFlagsViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" Classes="pageRoot">
+    <StackPanel Spacing="6">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <ItemsControl ItemsSource="{Binding Flags}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="pages:FastFlagEntryViewModel">
+              <Border Padding="0,8" BorderBrush="{DynamicResource LumenBorderBrush}" BorderThickness="0,0,0,1">
+                <Grid ColumnDefinitions="Auto,*,160">
+                  <CheckBox Grid.Column="0" IsChecked="{Binding Enabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                  <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource LumenTextBrush}" FontSize="13" />
+                      <Border Background="#3A2A12" CornerRadius="5" Padding="6,1" IsVisible="{Binding IsExperimental}">
+                        <TextBlock Text="EXPERIMENTAL" FontSize="9" Foreground="#E9C77E" />
+                      </Border>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Description}" Classes="caption" TextWrapping="Wrap" />
+                  </StackPanel>
+                  <TextBox Grid.Column="2" Text="{Binding Value, Mode=TwoWay}" VerticalAlignment="Center" IsEnabled="{Binding Enabled}" />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Classes="subtle" Content="Preview" Command="{Binding PreviewCommand}" />
+          <Button Classes="accent" Content="Apply" Command="{Binding ApplyCommand}" />
+          <Button Classes="subtle" Content="Restore defaults" Command="{Binding RestoreDefaultsCommand}" />
+        </StackPanel>
+        <TextBlock Text="{Binding StatusMessage}" Classes="caption" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card" IsVisible="{Binding HasPreview}">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="label" Text="CLIENTAPPSETTINGS.JSON (PREVIEW)" />
+        <TextBox Text="{Binding PreviewText}" IsReadOnly="True" AcceptsReturn="True"
+                 FontFamily="Cascadia Code,Consolas,monospace" FontSize="12"
+                 Background="Transparent" BorderThickness="0" MinHeight="120" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>
