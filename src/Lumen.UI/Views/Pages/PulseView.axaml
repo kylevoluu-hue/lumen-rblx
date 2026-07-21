@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="using:Lumen.UI.ViewModels.Pages"
+             xmlns:models="using:Lumen.Core.Models"
+             xmlns:conv="using:Lumen.UI.Converters"
+             x:Class="Lumen.UI.Views.Pages.PulseView"
+             x:DataType="pages:PulseViewModel"
+             x:CompileBindings="True">
+
+  <StackPanel Spacing="18" Classes="pageRoot">
+    <Grid ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" Spacing="6">
+        <TextBlock Text="{Binding Title}" Classes="h1" />
+        <TextBlock Text="{Binding Description}" Classes="subtitle" TextWrapping="Wrap" />
+      </StackPanel>
+      <Button Grid.Column="1" Classes="accent" Content="Run Pulse" Command="{Binding RunCommand}"
+              IsEnabled="{Binding !IsRunning}" VerticalAlignment="Center" />
+    </Grid>
+
+    <Border Classes="card">
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <TextBlock Classes="label" Text="OVERALL" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding OverallLabel}" Classes="value" />
+      </StackPanel>
+    </Border>
+
+    <ItemsControl ItemsSource="{Binding Checks}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="models:PulseCheck">
+          <Border Classes="card" Margin="0,0,0,10">
+            <Grid ColumnDefinitions="Auto,*">
+              <Border Grid.Column="0" Width="12" Height="12" CornerRadius="6" VerticalAlignment="Top" Margin="0,4,14,0"
+                      Background="{Binding Severity, Converter={x:Static conv:PulseSeverityToBrushConverter.Instance}}" />
+              <StackPanel Grid.Column="1" Spacing="3">
+                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" Foreground="{DynamicResource LumenTextBrush}" />
+                <TextBlock Text="{Binding Explanation}" Classes="caption" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding RecommendedAction}" IsVisible="{Binding HasRecommendedAction}"
+                           Foreground="{DynamicResource LumenAccentBrush}" FontSize="12" TextWrapping="Wrap" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+</UserControl>

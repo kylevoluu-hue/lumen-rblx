@@ -4,6 +4,7 @@ using Lumen.Core.Abstractions;
 using Lumen.Core.Common;
 using Lumen.Core.Configuration;
 using Lumen.Diagnostics;
+using Lumen.Diagnostics.Pulse;
 using Lumen.Launching;
 using Lumen.Mods;
 using Lumen.Profiles;
@@ -78,6 +79,16 @@ public static class LumenServiceRegistration
         // Diagnostics report
         services.AddSingleton<IDiagnosticReportBuilder, DiagnosticReportBuilder>();
 
+        // Lumen Pulse (local health checks)
+        services.AddSingleton<IPulseCheck, DataFolderPulseCheck>();
+        services.AddSingleton<IPulseCheck, DiskSpacePulseCheck>();
+        services.AddSingleton<IPulseCheck, ConfigurationPulseCheck>();
+        services.AddSingleton<IPulseCheck, BackupsPulseCheck>();
+        services.AddSingleton<IPulseCheck, CrashLogPulseCheck>();
+        services.AddSingleton<IPulseCheck, RobloxInstallationPulseCheck>();
+        services.AddSingleton<IPulseCheck, NetworkPulseCheck>();
+        services.AddSingleton<IPulseService, PulseService>();
+
         // Shared page view-models
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<LaunchViewModel>();
@@ -89,6 +100,7 @@ public static class LumenServiceRegistration
         services.AddSingleton<GraphicsViewModel>();
         services.AddSingleton<ModsViewModel>();
         services.AddSingleton<InstallationsViewModel>();
+        services.AddSingleton<PulseViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<PrivacyViewModel>();
         services.AddSingleton<DiagnosticsViewModel>();
@@ -114,6 +126,7 @@ public static class LumenServiceRegistration
             new("graphics", "Graphics", "\U0001F3A8", sp.GetRequiredService<GraphicsViewModel>()),
             new("mods", "Mods", "\U0001F9E9", sp.GetRequiredService<ModsViewModel>()),
             new("installations", "Installations", "\U0001F4BD", sp.GetRequiredService<InstallationsViewModel>()),
+            new("pulse", "Lumen Pulse", "\U0001F493", sp.GetRequiredService<PulseViewModel>()),
             new("diagnostics", "Diagnostics", "\U0001FA7A", sp.GetRequiredService<DiagnosticsViewModel>()),
             new("privacy", "Privacy", "\U0001F6E1", sp.GetRequiredService<PrivacyViewModel>()),
             new("settings", "Lumen Settings", "⚙", sp.GetRequiredService<SettingsViewModel>()),
